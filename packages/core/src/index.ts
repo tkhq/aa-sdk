@@ -21,6 +21,15 @@ export type { SmartAccountSigner } from "./signer/types.js";
 export { verifyEIP6492Signature, wrapWith6492 } from "./signer/utils.js";
 
 export {
+  erc4337Actions,
+  estimateUserOperationGas,
+  getFeeData,
+  getSupportedEntryPoints,
+  getUserOperationByHash,
+  getUserOperationReceipt,
+  sendUserOperation,
+} from "./client/actions/index.js";
+export {
   createPublicErc4337Client,
   createPublicErc4337FromClient,
 } from "./client/create-client.js";

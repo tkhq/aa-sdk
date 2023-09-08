@@ -79,7 +79,7 @@ export interface ISmartAccountProvider<
   readonly feeDataGetter: AccountMiddlewareFn;
   readonly customMiddleware?: AccountMiddlewareFn;
 
-  readonly account?: BaseSmartContractAccount;
+  readonly account?: BaseSmartContractAccount<TTransport>;
 
   /**
    * Sends a user operation using the connected account.
@@ -263,8 +263,10 @@ export interface ISmartAccountProvider<
    * @param fn - a function that given public rpc client, returns a smart contract account
    */
   connect(
-    fn: (provider: PublicErc4337Client<TTransport>) => BaseSmartContractAccount
-  ): this & { account: BaseSmartContractAccount };
+    fn: (
+      provider: PublicErc4337Client<TTransport>
+    ) => BaseSmartContractAccount<TTransport>
+  ): this & { account: BaseSmartContractAccount<TTransport> };
 
   /**
    * Allows for disconnecting the account from the provider so you can connect the provider to another account instance

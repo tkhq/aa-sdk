@@ -1,5 +1,6 @@
 import {
   type BatchUserOperationCallData,
+  type HttpTransport,
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import {
@@ -19,7 +20,7 @@ import {
 import { KernelAccountProvider } from "../provider.js";
 import type { KernelUserOperationCallData } from "../types.js";
 import { KernelBaseValidator, ValidatorMode } from "../validator/base.js";
-import { RPC_URL, API_KEY, OWNER_MNEMONIC } from "./constants.js";
+import { API_KEY, OWNER_MNEMONIC, RPC_URL } from "./constants.js";
 import { MockSigner } from "./mocks/mock-signer.js";
 
 describe("Kernel Account Tests", () => {
@@ -72,7 +73,7 @@ describe("Kernel Account Tests", () => {
   }
 
   function account(index: bigint, owner = mockOwner) {
-    const accountParams: KernelSmartAccountParams = {
+    const accountParams: KernelSmartAccountParams<HttpTransport> = {
       rpcClient: provider.rpcClient,
       entryPointAddress: config.entryPointAddress,
       chain: config.chain,
@@ -82,7 +83,7 @@ describe("Kernel Account Tests", () => {
       defaultValidator: owner === mockOwner ? mockValidator : validator,
       validator: owner === mockOwner ? mockValidator : validator,
     };
-    return new KernelSmartContractAccount(accountParams);
+    return new KernelSmartContractAccount<HttpTransport>(accountParams);
   }
 
   it("getAddress returns valid counterfactual address", async () => {

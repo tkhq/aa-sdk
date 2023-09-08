@@ -50,9 +50,9 @@
     "vitest": "^0.31.0"
   },
   "dependencies": {
-    "abitype": "^0.8.3",
+    "abitype": "^0.9.8",
     "eventemitter3": "^5.0.1",
-    "viem": "^1.5.3"
+    "viem": "^1.10.8"
   },
   "repository": {
     "type": "git",

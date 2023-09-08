@@ -93,7 +93,7 @@ export class SmartAccountProvider<
   private txRetryMulitplier: number;
 
   minPriorityFeePerBid: bigint;
-  rpcClient: PublicErc4337Client<Transport>;
+  rpcClient: PublicErc4337Client<TTransport>;
 
   constructor(
     rpcProvider: string | PublicErc4337Client<TTransport>,
@@ -430,7 +430,8 @@ export class SmartAccountProvider<
   };
 
   readonly feeDataGetter: AccountMiddlewareFn = async (struct) => {
-    const maxPriorityFeePerGas = await this.rpcClient.getMaxPriorityFeePerGas();
+    const maxPriorityFeePerGas =
+      await this.rpcClient.estimateMaxPriorityFeePerGas();
     const feeData = await this.rpcClient.getFeeData();
     if (!feeData.maxFeePerGas || !feeData.maxPriorityFeePerGas) {
       throw new Error(
@@ -499,8 +500,10 @@ export class SmartAccountProvider<
   };
 
   connect(
-    fn: (provider: PublicErc4337Client<TTransport>) => BaseSmartContractAccount
-  ): this & { account: BaseSmartContractAccount } {
+    fn: (
+      provider: PublicErc4337Client<TTransport>
+    ) => BaseSmartContractAccount<TTransport>
+  ): this & { account: BaseSmartContractAccount<TTransport> } {
     const account = fn(this.rpcClient);
     defineReadOnly(this, "account", account);
 
