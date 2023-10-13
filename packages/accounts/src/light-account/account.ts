@@ -5,6 +5,13 @@ import {
   type SmartAccountSigner,
 } from "@alchemy/aa-core";
 import {
+  toAccount,
+  toSimpleAccount,
+  type SimpleAccountParams,
+  type SmartAccount,
+} from "@alchemy/aa-core/dist/types/functional";
+import type { AccountConnectionParams } from "@alchemy/aa-core/dist/types/functional/index.js";
+import {
   concatHex,
   decodeFunctionResult,
   encodeFunctionData,
@@ -113,3 +120,58 @@ export class LightSmartContractAccount<
     ]);
   }
 }
+
+export const toLightAccount =
+  (params: SimpleAccountParams) =>
+  (
+    connectionParams: AccountConnectionParams
+  ): SmartAccount<{
+    getOwnerAddress: () => Promise<Address>;
+  }> => {
+    const account = toSimpleAccount(params)(connectionParams);
+    const lightAccount = toAccount({
+      ...account,
+      ...params,
+      async signTypedData(tdParams: SignTypedDataParams): Promise<Hash> {
+        return params.owner.signTypedData(tdParams);
+      },
+      async getAccountInitCode(): Promise<`0x${string}`> {
+        return concatHex([
+          this.factoryAddress,
+          encodeFunctionData({
+            abi: LightAccountFactoryAbi,
+            functionName: "createAccount",
+            args: [await params.owner.getAddress(), params.index ?? 0n],
+          }),
+        ]);
+      },
+    })(connectionParams);
+
+    return lightAccount.extend((la) => ({
+      async getOwnerAddress(): Promise<Address> {
+        const callResult = await connectionParams.rpcClient.call({
+          to: await la.getAddress(),
+          data: encodeFunctionData({
+            abi: LightAccountAbi,
+            functionName: "owner",
+          }),
+        });
+
+        if (callResult.data == null) {
+          throw new Error("could not get on-chain owner");
+        }
+
+        const decodedCallResult = decodeFunctionResult({
+          abi: LightAccountAbi,
+          functionName: "owner",
+          data: callResult.data,
+        });
+
+        if (decodedCallResult !== (await la.getOwner()!.getAddress())) {
+          throw new Error("on-chain owner does not match account owner");
+        }
+
+        return decodedCallResult;
+      },
+    }));
+  };

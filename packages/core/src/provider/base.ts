@@ -77,7 +77,7 @@ export interface SmartAccountProviderOpts {
   minPriorityFeePerBid?: bigint;
 }
 
-const minPriorityFeePerBidDefaults = new Map<number, bigint>([
+export const minPriorityFeePerBidDefaults = new Map<number, bigint>([
   [arbitrum.id, 10_000_000n],
   [arbitrumGoerli.id, 10_000_000n],
 ]);

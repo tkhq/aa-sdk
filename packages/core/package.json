@@ -25,6 +25,11 @@
       "import": "./dist/esm/index.js",
       "default": "./dist/cjs/index.js"
     },
+    "./functional": {
+      "types": "./dist/types/functional/index.d.ts",
+      "import": "./dist/esm/functional/index.js",
+      "default": "./dist/cjs/functional/index.js"
+    },
     "./package.json": "./package.json"
   },
   "publishConfig": {
