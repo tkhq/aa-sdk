@@ -17,6 +17,8 @@ import ViewHorizontalDivider from "@shared-components/atom/ViewHorizontalDivider
 import { chain } from "@shared-config/env";
 import { colors } from "@theme/color";
 import Icon, { IconType } from "react-native-dynamic-vector-icons";
+import { Routes } from "types/navigation";
+import SettingItem from "./SettingItem";
 
 interface SettingsScreenProps {}
 
@@ -72,8 +74,39 @@ const SettingTextItem = (props: {
 const SettingsScreen: React.FC<SettingsScreenProps> = () => {
   const { magicAuth, scaAddress, logout } = useWalletContext();
 
+  const { dispatchAlert } = useAlertContext();
+
   const [visibleSignOutModal, setVisibleSignOutModal] =
     useState<boolean>(false);
+
+  const setNewPin = async (result: boolean): Promise<void> => {
+    if (result) {
+      NavigationService.pop();
+    } else {
+      dispatchAlert({
+        type: "open",
+        alertType: "error",
+        message: "PIN mismatch",
+      });
+    }
+  };
+  const changePin = async (result: boolean): Promise<void> => {
+    if (result) {
+      NavigationService.navigate(Routes.Pin, {
+        type: "set",
+        result: setNewPin,
+        cancel: () => {
+          NavigationService.pop();
+        },
+      });
+    } else {
+      dispatchAlert({
+        type: "open",
+        alertType: "error",
+        message: "PIN mismatch",
+      });
+    }
+  };
 
   return (
     <Container
@@ -126,6 +159,20 @@ const SettingsScreen: React.FC<SettingsScreenProps> = () => {
               copiable={true}
             />
           )}
+        </View>
+        <View style={styles.itemGroup}>
+          <SettingItem
+            name={"Change PIN code"}
+            onPress={(): void => {
+              NavigationService.navigate(Routes.Pin, {
+                type: "auth",
+                result: changePin,
+                cancel: () => {
+                  NavigationService.pop();
+                },
+              });
+            }}
+          />
         </View>
         <View style={(styles.itemGroup, { alignSelf: "center" })}>
           <TouchableOpacity

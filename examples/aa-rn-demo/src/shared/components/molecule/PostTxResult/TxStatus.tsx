@@ -119,7 +119,11 @@ const TxStatus = ({
               </Row>
               <FormButton
                 figure="primary"
-                containerStyle={{ backgroundColor: "#4caf50", marginTop: 10 }}
+                containerStyle={{
+                  backgroundColor: "#4caf50",
+                  borderColor: "#4caf50",
+                  marginTop: 10,
+                }}
                 onPress={onPressClose}
               >
                 Success

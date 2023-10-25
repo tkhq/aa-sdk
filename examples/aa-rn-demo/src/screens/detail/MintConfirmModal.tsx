@@ -14,6 +14,8 @@ import type { OwnedNft } from "alchemy-sdk";
 import React, { type ReactElement } from "react";
 import { StyleSheet, View } from "react-native";
 import Icon, { IconType } from "react-native-dynamic-vector-icons";
+import * as NavigationService from "react-navigation-helpers";
+import { Routes } from "types/navigation";
 import { encodeFunctionData, formatEther, parseEther, type Hex } from "viem";
 
 const MintConfirmModal = ({
@@ -31,7 +33,7 @@ const MintConfirmModal = ({
 
   const [minting, setMinting] = React.useState(false);
 
-  const mintPrice = "price" in item ? item.price ?? parseEther("0.08") : 0n;
+  const mintPrice = "price" in item ? item.price ?? parseEther("0.00") : 0n;
 
   const mint = async () => {
     setMinting(true);
@@ -233,7 +235,26 @@ const MintConfirmModal = ({
         <FormButton
           containerStyle={{ flex: 1 }}
           disabled={!scaAddress || minting}
-          onPress={mint}
+          onPress={async (): Promise<void> => {
+            NavigationService.navigate(Routes.Pin, {
+              type: "auth",
+              result: async (result: boolean): Promise<void> => {
+                if (result) {
+                  NavigationService.pop();
+                  await mint();
+                } else {
+                  dispatchAlert({
+                    type: "open",
+                    alertType: "error",
+                    message: "PIN mismatch",
+                  });
+                }
+              },
+              cancel: (): void => {
+                NavigationService.pop();
+              },
+            });
+          }}
         >
           Confirm
         </FormButton>

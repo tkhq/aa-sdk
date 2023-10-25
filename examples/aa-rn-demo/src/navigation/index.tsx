@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import React from "react";
+import React, { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import Icon, { IconType } from "react-native-dynamic-vector-icons";
 import { isReadyRef, navigationRef } from "react-navigation-helpers";
@@ -9,13 +9,16 @@ import { isReadyRef, navigationRef } from "react-navigation-helpers";
 import { DarkTheme, LightTheme, palette } from "@theme/themes";
 // ? Screens
 import { useWalletContext } from "@context/wallet";
+import { useCredentialProvider } from "@hooks/useCredentialProvider";
 import { NavigationContainer, type RouteProp } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import DetailScreen from "@screens/detail/DetailScreen";
 import HomeScreen from "@screens/home/HomeScreen";
 import LoginScreen from "@screens/login/LoginScreen";
+import PinScreen from "@screens/pin/PinScreen";
 import ProfileScreen from "@screens/profile/ProfileScreen";
 import SettingsScreen from "@screens/settings/SettingsScreen";
+import * as NavigationService from "react-navigation-helpers";
 import { Routes, type ParamListBase } from "types/navigation";
 
 // ? If you want to use stack or tab or both
@@ -85,6 +88,25 @@ const Navigation = () => {
   };
 
   const TabNavigation = () => {
+    const { getPin } = useCredentialProvider();
+
+    useEffect(() => {
+      const checkPin = async (): Promise<void> => {
+        const isPinConfigured = (await getPin()) !== "";
+
+        if (!isPinConfigured) {
+          NavigationService.navigate(Routes.Pin, {
+            type: "set",
+            result: async (result: boolean): Promise<void> => {
+              result && NavigationService.pop();
+              return Promise.resolve();
+            },
+          });
+        }
+      };
+      setTimeout(checkPin, 100);
+    }, [getPin]);
+
     return (
       <Tab.Navigator
         screenOptions={({ route }) => ({
@@ -130,6 +152,7 @@ const Navigation = () => {
         ) : (
           <Stack.Screen name={Routes.Auth} component={AuthNavigation} />
         )}
+        <Stack.Screen name={Routes.Pin} component={PinScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

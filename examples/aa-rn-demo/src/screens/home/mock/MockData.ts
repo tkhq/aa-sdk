@@ -9,7 +9,7 @@ export default [
       "You minted this NFT with an ERC-4337 smart account powered by Account Kit.",
     contract: {
       tokenType: NftTokenType.ERC721,
-      address: "0x025C582D7d7ACA50ff37D730B628b3F65aC960C2",
+      address: "0x90A6f46B126ea8b8192A620a7Eb6FeB4112b85c9",
     },
     metadata:
       "https://static.alchemyapi.io/assets/accountkit/demo_metadata.json",
@@ -18,6 +18,6 @@ export default [
         raw: "https://static.alchemyapi.io/assets/accountkit/accountkit.jpg",
       },
     ],
-    price: parseEther("0.08"),
+    price: parseEther("0.00"),
   },
 ] as ICardItem[];

@@ -6,6 +6,7 @@ import {
 } from "@react-navigation/native";
 
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import type { PinType } from "@screens/pin/PinScreen";
 import { type OwnedNft } from "alchemy-sdk";
 export enum Routes {
   Main = "Main",
@@ -14,6 +15,7 @@ export enum Routes {
   Login = "Login",
   Home = "Home",
   Profile = "Profile",
+  Pin = "Pin",
   Setting = "Setting",
   Detail = "Detail",
 }
@@ -23,10 +25,19 @@ type TabRouteParamsUnion = {
   params: undefined;
 };
 
-type AuthRouteParamsUnion = {
-  route: Routes.Login;
-  params: undefined;
-};
+type AuthRouteParamsUnion =
+  | {
+      route: Routes.Login;
+      params: undefined;
+    }
+  | {
+      route: Routes.Pin;
+      params: {
+        type: PinType;
+        result?: (result: boolean) => Promise<void>;
+        cancel?: () => void;
+      };
+    };
 
 type MainRouteParamsUnion =
   | {
@@ -40,6 +51,14 @@ type MainRouteParamsUnion =
   | {
       route: Routes.Setting;
       params: undefined;
+    }
+  | {
+      route: Routes.Pin;
+      params: {
+        type: PinType;
+        result?: (result: boolean) => Promise<void>;
+        cancel?: () => void;
+      };
     }
   | {
       route: Routes.Detail;

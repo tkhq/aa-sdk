@@ -3358,9 +3358,9 @@
     "@lit-labs/ssr-dom-shim" "^1.0.0"
 
 "@magic-ext/react-native-bare-oauth@^16.1.1":
-  version "16.1.1"
-  resolved "https://registry.yarnpkg.com/@magic-ext/react-native-bare-oauth/-/react-native-bare-oauth-16.1.1.tgz#0169b53af7bfad40abf8219a14791cab1a4bce99"
-  integrity sha512-tJEGGAKFpvIYo4YC2oyouk09BK+evpvg/fXl68Dqq8EdX7bLzaNOmsh6HtlUm2/CZTn4A59VVReAscpIzMLJXA==
+  version "16.2.0"
+  resolved "https://registry.yarnpkg.com/@magic-ext/react-native-bare-oauth/-/react-native-bare-oauth-16.2.0.tgz#3a0537e607c1e406d48d78c05945e5328ca8c9d0"
+  integrity sha512-UNWoVWj6BeGM10UQyNEuvqX2U5GVDhQEWSQP+uQXqrZYg5kiHb7QtOUuurNKJ2zx9QyvLcFCUIosQVqA5ECacA==
   dependencies:
     "@magic-sdk/types" "^10.0.1"
     crypto-js "^3.3.0"
@@ -3371,10 +3371,10 @@
   resolved "https://registry.yarnpkg.com/@magic-sdk/commons/-/commons-16.1.1.tgz#fd9394552389b629f9d34bceca606d8f46fe3b15"
   integrity sha512-ZNknl69zTYIdo4rLO9I8yk4pTSTczZHDXMeZcnLKy992L7arcZ/yGgF9qCqMbp7cOubRRVImFH2jLMM/DeO85w==
 
-"@magic-sdk/commons@^17.1.1":
-  version "17.1.1"
-  resolved "https://registry.yarnpkg.com/@magic-sdk/commons/-/commons-17.1.1.tgz#bd1fb0c3b59e322e43fc5c30f10fa39ec35e934a"
-  integrity sha512-fiklHyZ1Om+u236VeRwmBu1QEs9ZSrEwH2TvU6xIteR0R+WiS8TuAjo0sDmrXb8w3sPc0bnNGqgSb5Fa/UHs+w==
+"@magic-sdk/commons@^17.2.0":
+  version "17.2.0"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/commons/-/commons-17.2.0.tgz#b125d15e4d096ad9e94171635b6b6c408314105f"
+  integrity sha512-+NkPL9r1twzgaPp94+ykF0T3pU2GHVCJup4YjdOiGWMngqqJ50aLKi0dgaNjV77VA9svxWI5NnKgaiwWkNSUyQ==
 
 "@magic-sdk/provider@^20.1.1":
   version "20.1.1"
@@ -3385,24 +3385,24 @@
     eventemitter3 "^4.0.4"
     web3-core "1.5.2"
 
-"@magic-sdk/provider@^21.1.1":
-  version "21.1.1"
-  resolved "https://registry.yarnpkg.com/@magic-sdk/provider/-/provider-21.1.1.tgz#92de3a4b7301326d8579d2d5689f17aa46ea7e6c"
-  integrity sha512-V7pxQkVhRYe2S9XUg6R/qbAvInzrr+5mpcVN9moI1zJRQ7iKamgwc964+ZRxo5D99lOWMFGo2PZVn9/MjDindQ==
+"@magic-sdk/provider@^21.2.0":
+  version "21.2.0"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/provider/-/provider-21.2.0.tgz#29c8c828bab689f4cb2220cffc241a8b3d1e601b"
+  integrity sha512-zrQKYXra9eCfdRagA7hoXs99gYV/OmtdXm1PNy1dkq8iVY+Hltlk4zCkkFr2qMcroRrMId4Ajbtuar65xxb+GA==
   dependencies:
-    "@magic-sdk/types" "^17.1.1"
+    "@magic-sdk/types" "^17.2.0"
     eventemitter3 "^4.0.4"
     web3-core "1.5.2"
 
 "@magic-sdk/react-native-bare@^22.1.1":
-  version "22.1.1"
-  resolved "https://registry.yarnpkg.com/@magic-sdk/react-native-bare/-/react-native-bare-22.1.1.tgz#0facb176df0306e78f84ee96ab7d6f8fa47bb6c1"
-  integrity sha512-JQ1GqUuDVnT6+8EtIn1pyFBC5VfDEU15uMsVm94Kg23kewYMXBosfI4WlYoVcSbKalFiXAoDLsVfa2JdGKD0/Q==
+  version "22.2.0"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/react-native-bare/-/react-native-bare-22.2.0.tgz#7b023be743b5d3f6a10b89fb3c774bb87e67ded0"
+  integrity sha512-QB0ohfwgrNWVv2ZK5e9n+kpgZnuCyEGWIpXiU7/+txZMzlGu1HkXmttLnjo7lxe3aafnPRdvdBgk1FaHyFjqFQ==
   dependencies:
     "@aveq-research/localforage-asyncstorage-driver" "^3.0.1"
-    "@magic-sdk/commons" "^17.1.1"
-    "@magic-sdk/provider" "^21.1.1"
-    "@magic-sdk/types" "^17.1.1"
+    "@magic-sdk/commons" "^17.2.0"
+    "@magic-sdk/provider" "^21.2.0"
+    "@magic-sdk/types" "^17.2.0"
     "@react-native-async-storage/async-storage" "^1.15.5"
     "@types/lodash" "^4.14.158"
     buffer "~5.6.0"
@@ -3419,10 +3419,10 @@
   resolved "https://registry.yarnpkg.com/@magic-sdk/types/-/types-10.0.1.tgz#59b683670587634bdbc3d632fced4d5fda7c35a4"
   integrity sha512-JNB+sEKdVDZd2MDs4QaPM6vxCNfGuYhWUd14rDLixcbdut2u9g5z6yDxs1rYWYEVaUknNs+zGp2K/NDPo9UfdA==
 
-"@magic-sdk/types@^17.0.2", "@magic-sdk/types@^17.1.1":
-  version "17.1.1"
-  resolved "https://registry.yarnpkg.com/@magic-sdk/types/-/types-17.1.1.tgz#f020ec4dd3e4453ceb67ba28355268e9deff628f"
-  integrity sha512-CrQuVo8HQTJJYr8SSCD4VorTMdabGr5eNikWHyqRFf6mOzjEoTAFmk7hXEOP+Nm4GYai/+KaJ8zicKf+DUwmzg==
+"@magic-sdk/types@^17.0.2", "@magic-sdk/types@^17.2.0":
+  version "17.2.0"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/types/-/types-17.2.0.tgz#3e554748808e2f35ca5bb9ceda0cdf88d2ce6d35"
+  integrity sha512-VJmGP+DwMnuIuMLb+IDHNAkYLcHH+XqPwHb6mcLNI9e30CDMXoFN60hmdhDRZLjI9JF/NPS3eEsd40Xz6Iih2A==
 
 "@metamask/safe-event-emitter@2.0.0", "@metamask/safe-event-emitter@^2.0.0":
   version "2.0.0"
@@ -5623,6 +5623,11 @@
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@vanilla-extract/sprinkles/-/sprinkles-1.5.0.tgz#c921183ae518bb484299c2dc81f2acefd91c3dbe"
   integrity sha512-W58f2Rzz5lLmk0jbhgStVlZl5wEiPB1Ur3fRvUaBM+MrifZ3qskmFq/CiH//fEYeG5Dh9vF1qRviMMH46cX9Nw==
+
+"@vitejs/plugin-vue@4.3.1":
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/@vitejs/plugin-vue/-/plugin-vue-4.3.1.tgz#635cf512dd1d5c78adf9e24615696e4918cd9d88"
+  integrity sha512-tUBEtWcF7wFtII7ayNiLNDTCE1X1afySEo+XNVMNkFXaThENyCowIEX095QqbJZGTgoOcSVDJGlnde2NG4jtbQ==
 
 "@vitest/expect@0.31.4":
   version "0.31.4"
@@ -9007,9 +9012,9 @@ ejs@^3.1.7:
     jake "^10.8.5"
 
 electron-to-chromium@^1.4.535:
-  version "1.4.565"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.565.tgz#205f3746a759ec3c43bce98b9eef5445f2721ea9"
-  integrity sha512-XbMoT6yIvg2xzcbs5hCADi0dXBh4//En3oFXmtPX+jiyyiCTiM9DGFT2SLottjpEs9Z8Mh8SqahbR96MaHfuSg==
+  version "1.4.566"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.566.tgz#5c5ba1d2dc895f4887043f0cc7e61798c7e5919a"
+  integrity sha512-mv+fAy27uOmTVlUULy15U3DVJ+jg+8iyKH1bpwboCRhtDC69GKf1PPTZvEIhCyDr81RFqfxZJYrbgp933a1vtg==
 
 elliptic@6.5.4, elliptic@^6.4.0, elliptic@^6.5.3, elliptic@^6.5.4:
   version "6.5.4"
@@ -10049,7 +10054,7 @@ fast-glob@3.2.7:
     merge2 "^1.3.0"
     micromatch "^4.0.4"
 
-fast-glob@^3.2.12, fast-glob@^3.2.9, fast-glob@^3.3.1:
+fast-glob@^3.2.9, fast-glob@^3.3.0, fast-glob@^3.3.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-3.3.1.tgz#784b4e897340f3dbbef17413b3f11acf03c874c4"
   integrity sha512-kNFPyjhh5cKjrUltxs+wFx+ZkbRaxxmZ+X0ZU31SOsxCEtP9VPgtq2teZw1DebupL5GmDaNQ6yKMMVcM41iqDg==
@@ -10279,9 +10284,9 @@ flatten@^1.0.2:
   integrity sha512-dVsPA/UwQ8+2uoFe5GHtiBMu48dWLTdsuEd7CKGlZlD78r1TTWBvDuFaFGKCo/ZfEr95Uk56vZoX86OsHkUeIg==
 
 flow-parser@0.*:
-  version "0.219.3"
-  resolved "https://registry.yarnpkg.com/flow-parser/-/flow-parser-0.219.3.tgz#f817121332acb168f4a71ba2dfa7bce8c2723aa1"
-  integrity sha512-dyPC0+TwAcBMQ1IZhSpj91mxZ31AI9FJ3q/ZMt8kdKaITnDCGmyUyWOwUfAKBVLrUTkdaTfpla0muhwOGY+dXw==
+  version "0.219.4"
+  resolved "https://registry.yarnpkg.com/flow-parser/-/flow-parser-0.219.4.tgz#ee07223d2e6463afd5458724f7a9253c4c142032"
+  integrity sha512-HNskU8X5MRRfhgX1Y/kMYRUM9pIh0vbosYP2Gt5N6A9+ShsgxPWLh62SgfuGk+Qz+eboqCYBff4CEN1vATJ7AQ==
 
 flow-parser@^0.185.0:
   version "0.185.2"
@@ -11957,7 +11962,7 @@ jest-worker@^27.2.0:
     merge-stream "^2.0.0"
     supports-color "^8.0.0"
 
-jiti@^1.18.2:
+jiti@^1.19.1:
   version "1.20.0"
   resolved "https://registry.yarnpkg.com/jiti/-/jiti-1.20.0.tgz#2d823b5852ee8963585c8dd8b7992ffc1ae83b42"
   integrity sha512-3TV69ZbrvV6U5DfQimop50jE9Dl6J8O1ja1dvBbMba/sZ3YBEQqJ2VZRoQPVnhlzjNtU1vaXRZVrVjU4qtm8yA==
@@ -15728,9 +15733,9 @@ react-native-fast-image@^8.6.3:
   integrity sha512-Sdw4ESidXCXOmQ9EcYguNY2swyoWmx53kym2zRsvi+VeFCHEdkO+WG1DK+6W81juot40bbfLNhkc63QnWtesNg==
 
 react-native-gesture-handler@^2.13.2:
-  version "2.13.3"
-  resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.13.3.tgz#417dac3d063fd61589f21187ad732372d01c8feb"
-  integrity sha512-6sNXtmRfYxQWgH0TjQX03QQ4UfCyM8jX1Ee1jXc3uNgefk03qapGGxZ2noXodGWKHzpsqMxB0O1lFLGew0GRrw==
+  version "2.13.4"
+  resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.13.4.tgz#6a99384330278c4488bcfc7f1814be3e0d7401fd"
+  integrity sha512-smpYOVbvWABpq2H+lmDnfOLCTH934aUPO1w2/pQXvm1j+M/vmGQmvgRDJOpXcks17HLtNNKXD6tcODf3aPqDfA==
   dependencies:
     "@egjs/hammerjs" "^2.0.17"
     hoist-non-react-statics "^3.3.0"
@@ -15786,13 +15791,18 @@ react-native-localization@^2.3.1:
     react-localization "^1.0.17"
 
 react-native-paper@^5.10.6:
-  version "5.11.0"
-  resolved "https://registry.yarnpkg.com/react-native-paper/-/react-native-paper-5.11.0.tgz#9cd92f4e7c2506672b7b920dbc79e2dde30a07f4"
-  integrity sha512-7Wvbr1Lgw1xYdLpuWLwk69NOarlJN5CNKqSSKWj61HX7m78j5bQPBxsekFs5WfVZ72RbAqfDpjBg8HA7Js/LyQ==
+  version "5.11.1"
+  resolved "https://registry.yarnpkg.com/react-native-paper/-/react-native-paper-5.11.1.tgz#34f612d6fb28099334db08a1bd109086ea91dcac"
+  integrity sha512-axqRTagGL8LtuYh172cx2Q2THOVJ3PTpPjCKhL5ECRdpJs2ceiboVecSiOIBuO3H7dVpaneptBA0vJr9HeVHwg==
   dependencies:
     "@callstack/react-theme-provider" "^3.0.9"
     color "^3.1.2"
     use-latest-callback "^0.1.5"
+
+react-native-passkey@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-passkey/-/react-native-passkey-2.1.1.tgz#30a1f4d99e22a209a4cc1e64b37a363c06eac8c3"
+  integrity sha512-/SBlL+8aJOiAAyO4jmRhJAxo1LklMpjQijLyl1jZlt9bKtRnh4Uz94z7AYouBR2anTB+DaEycLIhunG7h8Xbwg==
 
 react-native-permissions@^3.10.0:
   version "3.10.0"
@@ -17578,19 +17588,19 @@ tabbable@^6.2.0:
   integrity sha512-Cat63mxsVJlzYvN51JmVXIgNoUokrIaT2zLclCXjRd8boZ0004U4KCs/sToJ75C6sdlByWxpYnb5Boif1VSFew==
 
 tailwindcss@^3, tailwindcss@^3.1, tailwindcss@^3.3.3:
-  version "3.3.3"
-  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-3.3.3.tgz#90da807393a2859189e48e9e7000e6880a736daf"
-  integrity sha512-A0KgSkef7eE4Mf+nKJ83i75TMyq8HqY3qmFIJSWy8bNt0v1lG7jUcpGpoTFxAwYcWOphcTBLPPJg+bDfhDf52w==
+  version "3.3.4"
+  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-3.3.4.tgz#f08c493ff3ddf03081c40e780e98f129e1c8214d"
+  integrity sha512-JXZNOkggUAc9T5E7nCrimoXHcSf9h3NWFe5sh36CGD/3M5TRLuQeFnQoDsit2uVTqgoOZHLx5rTykLUu16vsMQ==
   dependencies:
     "@alloc/quick-lru" "^5.2.0"
     arg "^5.0.2"
     chokidar "^3.5.3"
     didyoumean "^1.2.2"
     dlv "^1.1.3"
-    fast-glob "^3.2.12"
+    fast-glob "^3.3.0"
     glob-parent "^6.0.2"
     is-glob "^4.0.3"
-    jiti "^1.18.2"
+    jiti "^1.19.1"
     lilconfig "^2.1.0"
     micromatch "^4.0.5"
     normalize-path "^3.0.0"
@@ -18550,13 +18560,14 @@ vite-node@0.31.4:
     fsevents "~2.3.2"
 
 vitepress@^1.0.0-rc.14:
-  version "1.0.0-rc.23"
-  resolved "https://registry.yarnpkg.com/vitepress/-/vitepress-1.0.0-rc.23.tgz#eb477d89951b59738a86ac5884dd2fe891d35aac"
-  integrity sha512-0YoBt8aFgbRt2JtYaCeTqq4W21q5lbGso+g1ZwkYYS35ExJxORssRJunhFuUcby8QeN4BP/88QDgsVSIVLAfXQ==
+  version "1.0.0-rc.24"
+  resolved "https://registry.yarnpkg.com/vitepress/-/vitepress-1.0.0-rc.24.tgz#517b44d10e0cd3773f5e2f9799c2bde8e60f0505"
+  integrity sha512-RpnL8cnOGwiRlBbrYQUm9sYkJbtyOt/wYXk2diTcokY4yvks/5lq9LuSt+MURWB6ZqwpSNHvTmxgaSfLoG0/OA==
   dependencies:
     "@docsearch/css" "^3.5.2"
     "@docsearch/js" "^3.5.2"
     "@types/markdown-it" "^13.0.4"
+    "@vitejs/plugin-vue" "4.3.1"
     "@vue/devtools-api" "^6.5.1"
     "@vueuse/core" "^10.5.0"
     "@vueuse/integrations" "^10.5.0"
