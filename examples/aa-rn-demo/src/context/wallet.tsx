@@ -12,12 +12,16 @@ import React, {
   useState,
   type ReactNode,
 } from "react";
+import FingerprintScanner, {
+  type Biometrics,
+} from "react-native-fingerprint-scanner";
 import RNRestart from "react-native-restart";
 import type { MagicAuth, MagicAuthType } from "types/magic";
 import { useAlertContext } from "./alert";
 
 type WalletContextProps = {
   loading: boolean;
+  biometricSupported: Biometrics | null;
 
   // Functions
   login: (type: MagicAuthType, ...params: any[]) => Promise<void>;
@@ -36,6 +40,7 @@ const WalletContext = createContext<WalletContextProps>({
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
   loading: false,
+  biometricSupported: null,
 });
 
 export const useWalletContext = () => useContext(WalletContext);
@@ -53,9 +58,33 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       entryPointAddress,
     });
 
+  const [biometricType, setBiometricType] = useState<Biometrics | null>(null);
+
+  useAsyncEffect(async () => {
+    try {
+      const _biometricType = await FingerprintScanner.isSensorAvailable();
+      setBiometricType(_biometricType);
+    } catch (error) {
+      console.log("biometric not supported");
+      setBiometricType(null);
+    }
+  }, []);
+
   const login = useCallback(
     async (type: MagicAuthType, ...params: any[]) => {
       try {
+        if (type === "passkey") {
+          if (!biometricType) {
+            throw new Error("Passkey is not supported on this device");
+          }
+
+          await FingerprintScanner.authenticate({
+            description: `Scan your ${biometricType} on the device to continue'`,
+            fallbackEnabled: true,
+          });
+          // TODO create wallet
+        }
+
         const res = await magicLogin(type, ...params);
         const metaData = await magic.user.getInfo();
 
@@ -91,7 +120,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         });
       }
     },
-    [magicLogin, dispatchAlert],
+    [magicLogin, dispatchAlert, biometricType],
   );
 
   useAsyncEffect(async () => {
@@ -174,6 +203,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   return (
     <WalletContext.Provider
       value={{
+        biometricSupported: biometricType,
         loading,
         login,
         logout,

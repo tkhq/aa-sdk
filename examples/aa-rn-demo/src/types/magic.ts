@@ -12,4 +12,10 @@ export type MagicAuth = {
   oAuthRedirectResult?: OAuthRedirectResult | null;
 };
 
-export type MagicAuthType = "google" | "apple" | "magic" | "email" | "sms";
+export type MagicAuthType =
+  | "google"
+  | "apple"
+  | "magic"
+  | "email"
+  | "sms"
+  | "passkey";

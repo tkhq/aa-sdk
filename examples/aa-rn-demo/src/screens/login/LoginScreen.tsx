@@ -27,7 +27,7 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
   const [loginWithSMS, setLoginWithSMS] = React.useState<boolean>(false);
   const [input, setInput] = React.useState<string>("");
 
-  const { login } = useWalletContext();
+  const { login, biometricSupported } = useWalletContext();
 
   return (
     <View style={styles.container}>
@@ -121,6 +121,15 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
                       setLoginWithSMS(true);
                     }}
                     name="comment"
+                    type={IconType.FontAwesome5}
+                  />
+                  <IconButton
+                    size={36}
+                    onPress={() => {
+                      login("passkey");
+                    }}
+                    disabled={!biometricSupported}
+                    name="fingerprint"
                     type={IconType.FontAwesome5}
                   />
                 </View>
