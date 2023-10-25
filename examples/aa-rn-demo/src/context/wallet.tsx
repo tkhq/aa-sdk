@@ -108,11 +108,19 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
           type: null,
           metaData: null,
         });
-        dispatchAlert({
-          type: "open",
-          alertType: "error",
-          message: `Error logging in using ${type}`,
-        });
+        if (error instanceof Error && error.message.includes("cancel")) {
+          dispatchAlert({
+            type: "open",
+            alertType: "info",
+            message: `Log in using ${type} cancelled`,
+          });
+        } else {
+          dispatchAlert({
+            type: "open",
+            alertType: "error",
+            message: `Error logging in using ${type}`,
+          });
+        }
       }
     },
     [magicLogin, dispatchAlert, turnkeyLogin],

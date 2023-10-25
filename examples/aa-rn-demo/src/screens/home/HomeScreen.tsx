@@ -1,6 +1,5 @@
-import React, { useMemo } from "react";
-import { FlatList, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import React, { useCallback, useEffect, useMemo } from "react";
+import { FlatList, Linking, Platform, SafeAreaView, View } from "react-native";
 import * as NavigationService from "react-navigation-helpers";
 
 /**
@@ -67,6 +66,42 @@ const HomeScreen: React.FC<HomeScreenProps> = () => {
       <List />
     </View>
   );
+
+  const handleInitialUrl = (url: string | null) => {
+    if (url === null) return;
+
+    const route = url.replace(/.*?:\/\//g, "");
+    // eslint-disable-next-line no-useless-escape
+    const tokens = route.match(/\/([^\/]+)\/?$/) || [];
+    const id = tokens.length > 0 ? tokens[1] : null;
+    if (id === null) {
+      console.log(`Deeplink: Invalid deeplink url ${url}`);
+      return;
+    }
+
+    const [routeName] = route.split("/");
+    console.log(`Deeplink: ${routeName} ${id}`);
+    if (routeName === "nft") {
+      NavigationService.push(Routes.Detail, { item: MockData[Number(id)] });
+    } else {
+      console.log(`Deeplink: Unable to find route ${url}`);
+    }
+  };
+
+  const handleOpenUrl = useCallback((event: { url: string | null }) => {
+    handleInitialUrl(event.url);
+  }, []);
+
+  useEffect(() => {
+    if (Platform.OS === "android") {
+      Linking.getInitialURL().then((url) => {
+        handleInitialUrl(url);
+      });
+      return;
+    }
+    Linking.addEventListener("url", handleOpenUrl);
+    return () => Linking.removeAllListeners("url");
+  }, [handleOpenUrl]);
 
   return (
     <SafeAreaView style={styles.container}>

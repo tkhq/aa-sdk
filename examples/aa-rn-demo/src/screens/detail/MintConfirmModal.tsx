@@ -38,6 +38,7 @@ const MintConfirmModal = ({
   const mint = async () => {
     setMinting(true);
     try {
+      setShowBottomSheet(false);
       const res = await postTx({
         target: item.contract.address as Hex,
         data: encodeFunctionData({
@@ -225,17 +226,21 @@ const MintConfirmModal = ({
       </View>
       <Row style={styles.footer}>
         <FormButton
+          containerStyle={{ opacity: minting ? 0.5 : 1 }}
           figure="outline"
           onPress={(): void => {
+            if (minting) return;
             setShowBottomSheet(false);
           }}
         >
           Reject
         </FormButton>
         <FormButton
-          containerStyle={{ flex: 1 }}
+          containerStyle={{ flex: 1, opacity: minting ? 0.5 : 1 }}
           disabled={!scaAddress || minting}
           onPress={async (): Promise<void> => {
+            if (minting) return;
+
             NavigationService.navigate(Routes.Pin, {
               type: "auth",
               result: async (result: boolean): Promise<void> => {
