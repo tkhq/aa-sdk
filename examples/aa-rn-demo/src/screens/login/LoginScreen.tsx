@@ -67,11 +67,12 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
                       marginTop: 24,
                       justifyContent: "center",
                       alignContent: "center",
-                      marginStart: -24,
+                      marginStart: -80,
                     },
                   ]}
                 >
                   <IconButton
+                    style={{ marginRight: 48 }}
                     onPress={() => {
                       setLoginWithEmail(false);
                       setLoginWithSMS(false);
@@ -87,7 +88,7 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
                     handler={() =>
                       login(loginWithEmail ? "email" : "sms", input)
                     }
-                    title="Login with SMS"
+                    title={`Login with ${loginWithEmail ? "Email" : "SMS"}`}
                   />
                 </View>
               </>
@@ -102,7 +103,7 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
                     flex: 1,
                     marginVertical: 24,
                     justifyContent: "center",
-                    columnGap: 60,
+                    columnGap: 48,
                   }}
                 >
                   <IconButton
@@ -125,8 +126,9 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
                   />
                   <IconButton
                     size={36}
+                    style={{ opacity: biometricSupported ? 1 : 0.5 }}
                     onPress={() => {
-                      login("passkey");
+                      if (biometricSupported) login("passkey");
                     }}
                     disabled={!biometricSupported}
                     name="fingerprint"

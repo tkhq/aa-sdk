@@ -6,11 +6,12 @@ import Container from "@shared-components/atom/Container";
 import Header from "@shared-components/atom/Header";
 import { TouchableButton } from "@shared-components/button/TouchableButton";
 import { StyleSheet } from "react-native";
+import type { Routes } from "types/navigation";
 import MintConfirmModal from "./MintConfirmModal";
 import NftDetails from "./NftDetails";
 
 const DetailScreen = (): ReactElement => {
-  const { params } = useAppNavigation();
+  const { params } = useAppNavigation<Routes.Detail>();
   const [showBottomSheet, setShowBottomSheet] = useState(false);
 
   return (

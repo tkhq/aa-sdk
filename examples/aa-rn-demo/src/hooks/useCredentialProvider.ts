@@ -24,11 +24,7 @@ export const useCredentialProvider = () => {
   }, []);
 
   const removeKeys = useCallback(async () => {
-    await Promise.all([
-      resetInternetCredentials(KeyChainEnum.PK),
-      resetInternetCredentials(KeyChainEnum.NEW_PIN),
-      resetInternetCredentials(KeyChainEnum.PIN),
-    ]);
+    await Promise.all([resetInternetCredentials(KeyChainEnum.PK)]);
   }, []);
 
   const saveNewPin = useCallback(async (pin: string) => {

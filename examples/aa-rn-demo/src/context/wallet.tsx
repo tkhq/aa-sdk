@@ -3,94 +3,90 @@ import { type Address, type Hex } from "@alchemy/aa-core";
 import { magic, useMagicContext } from "@context/magic";
 import { useAlchemyProvider } from "@hooks/useAlchemyProvider";
 import { useAsyncEffect } from "@hooks/useAsyncEffect";
+import { useCredentialProvider } from "@hooks/useCredentialProvider";
 import type { OAuthRedirectResult } from "@magic-ext/react-native-bare-oauth";
 import { entryPointAddress } from "@shared-config/env";
 import React, {
   createContext,
   useCallback,
   useContext,
+  useMemo,
   useState,
   type ReactNode,
 } from "react";
-import FingerprintScanner, {
-  type Biometrics,
-} from "react-native-fingerprint-scanner";
 import RNRestart from "react-native-restart";
-import type { MagicAuth, MagicAuthType } from "types/magic";
+import type { Auth, AuthType } from "types/auth";
 import { useAlertContext } from "./alert";
+import { useTurnkeyContext } from "./turnkey";
 
 type WalletContextProps = {
   loading: boolean;
-  biometricSupported: Biometrics | null;
+  biometricSupported: boolean;
 
   // Functions
-  login: (type: MagicAuthType, ...params: any[]) => Promise<void>;
+  login: (type: AuthType, ...params: any[]) => Promise<void>;
   logout: () => Promise<void>;
 
   // Properties
   provider: AlchemyProvider;
   scaAddress?: Address;
-  magicAuth?: MagicAuth;
+  auth?: Auth;
 };
 
 const defaultUnset: any = null;
 const WalletContext = createContext<WalletContextProps>({
+  biometricSupported: false,
   // Default Values
   provider: defaultUnset,
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
   loading: false,
-  biometricSupported: null,
 });
 
 export const useWalletContext = () => useContext(WalletContext);
 
 export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const { dispatchAlert } = useAlertContext();
+  const { getPkey } = useCredentialProvider();
 
   const [scaAddress, setScaAddress] = useState<Address>();
   const [loading, setLoading] = useState<boolean>(true);
 
-  const [magicAuth, setMagicAuth] = useState<MagicAuth>();
-  const { signer, login: magicLogin, logout: magicLogout } = useMagicContext();
+  const [auth, setAuth] = useState<Auth>();
+  const {
+    signer: magicSigner,
+    login: magicLogin,
+    logout: magicLogout,
+  } = useMagicContext();
+  const {
+    biometricType,
+    signer: turnkeySigner,
+    login: turnkeyLogin,
+    logout: turnkeyLogout,
+  } = useTurnkeyContext();
   const { provider, connectProviderToAccount, disconnectProviderFromAccount } =
     useAlchemyProvider({
       entryPointAddress,
     });
 
-  const [biometricType, setBiometricType] = useState<Biometrics | null>(null);
-
-  useAsyncEffect(async () => {
-    try {
-      const _biometricType = await FingerprintScanner.isSensorAvailable();
-      setBiometricType(_biometricType);
-    } catch (error) {
-      console.log("biometric not supported");
-      setBiometricType(null);
-    }
-  }, []);
-
   const login = useCallback(
-    async (type: MagicAuthType, ...params: any[]) => {
+    async (type: AuthType, ...params: any[]) => {
       try {
         if (type === "passkey") {
-          if (!biometricType) {
-            throw new Error("Passkey is not supported on this device");
-          }
-
-          await FingerprintScanner.authenticate({
-            description: `Scan your ${biometricType} on the device to continue'`,
-            fallbackEnabled: true,
+          const address = await turnkeyLogin();
+          setAuth({
+            address,
+            type,
           });
-          // TODO create wallet
+          return;
         }
 
         const res = await magicLogin(type, ...params);
         const metaData = await magic.user.getInfo();
 
-        setMagicAuth({
+        setAuth({
           address: metaData.publicAddress,
-          isLoggedIn: true,
+          type,
           metaData,
           did: type === "email" || type === "sms" ? String(res) : undefined,
           email: metaData.email,
@@ -108,9 +104,9 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         });
       } catch (error) {
         console.error(error);
-        setMagicAuth({
+        setAuth({
           address: null,
-          isLoggedIn: false,
+          type: null,
           metaData: null,
         });
         dispatchAlert({
@@ -120,11 +116,16 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         });
       }
     },
-    [magicLogin, dispatchAlert, biometricType],
+    [magicLogin, dispatchAlert, turnkeyLogin],
+  );
+
+  const signer = useMemo(
+    () => magicSigner || turnkeySigner,
+    [magicSigner, turnkeySigner],
   );
 
   useAsyncEffect(async () => {
-    if (magicAuth === undefined || !magicAuth.isLoggedIn || !signer) {
+    if (auth === undefined || auth.type === null || !signer) {
       return;
     }
     if (!provider.isConnected()) {
@@ -134,17 +135,17 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       setScaAddress(_scaAddress);
       return;
     }
-  }, [magicAuth?.isLoggedIn]);
+  }, [auth, signer]);
 
   const logout = useCallback(async () => {
     try {
-      await magicLogout();
+      await Promise.all([magicLogout(), turnkeyLogout()]);
     } catch (error) {
       console.error(error);
     } finally {
-      setMagicAuth({
+      setAuth({
         address: null,
-        isLoggedIn: false,
+        type: null,
         metaData: null,
       });
       disconnectProviderFromAccount();
@@ -156,44 +157,52 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       });
       RNRestart.restart();
     }
-  }, [magicLogout, disconnectProviderFromAccount, dispatchAlert]);
+  }, [
+    magicLogout,
+    turnkeyLogout,
+    disconnectProviderFromAccount,
+    dispatchAlert,
+  ]);
 
   useAsyncEffect(async () => {
-    if (magicAuth || !signer) {
+    if (auth || !signer) {
       return;
     }
 
-    const isLoggedIn = await magic.user.isLoggedIn();
-    if (!isLoggedIn) {
-      setLoading(false);
-      setMagicAuth({
-        address: null,
-        isLoggedIn: false,
-        metaData: null,
+    const address = await getPkey();
+    if (address) {
+      setAuth({
+        address,
+        type: "passkey",
       });
-      return;
-    }
+    } else {
+      const isLoggedIn = await magic.user.isLoggedIn();
+      if (!isLoggedIn) {
+        setLoading(false);
+        setAuth({
+          address: null,
+          type: null,
+          metaData: null,
+        });
+        return;
+      }
 
-    const metaData = await magic.user.getInfo();
-    setMagicAuth({
-      address: metaData.publicAddress,
-      isLoggedIn: true,
-      metaData,
-      email: metaData.email,
-      phoneNumber: metaData.phoneNumber,
-    });
+      const metaData = await magic.user.getInfo();
+      setAuth({
+        address: metaData.publicAddress,
+        type: "magic",
+        metaData,
+        email: metaData.email,
+        phoneNumber: metaData.phoneNumber,
+      });
+    }
 
     const _scaAddress: Hex = await provider.getAddress();
-    console.log(
-      "User already logged in",
-      metaData,
-      provider.isConnected(),
-      _scaAddress,
-    );
+    console.log("User already logged in", provider.isConnected(), _scaAddress);
     if (provider.isConnected()) {
       setScaAddress(_scaAddress);
     } else {
-      console.log("alread logged in, connecting provider to account");
+      console.log("already logged in, connecting provider to account");
       await connectProviderToAccount(signer);
       setScaAddress(_scaAddress);
     }
@@ -203,11 +212,11 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   return (
     <WalletContext.Provider
       value={{
-        biometricSupported: biometricType,
+        biometricSupported: biometricType !== null,
         loading,
         login,
         logout,
-        magicAuth,
+        auth,
         provider,
         scaAddress,
       }}

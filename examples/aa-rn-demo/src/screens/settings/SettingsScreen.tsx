@@ -72,7 +72,7 @@ const SettingTextItem = (props: {
 };
 
 const SettingsScreen: React.FC<SettingsScreenProps> = () => {
-  const { magicAuth, scaAddress, logout } = useWalletContext();
+  const { auth: magicAuth, scaAddress, logout } = useWalletContext();
 
   const { dispatchAlert } = useAlertContext();
 

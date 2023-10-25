@@ -14,7 +14,7 @@ import ProfileWalletAddress from "./ProfileWalletAddress";
 
 const ProfileHeader = (): ReactElement => {
   const { top } = useSafeAreaInsets();
-  const { magicAuth, scaAddress: address } = useWalletContext();
+  const { auth: magicAuth, scaAddress: address } = useWalletContext();
 
   return (
     <View style={styles.container}>

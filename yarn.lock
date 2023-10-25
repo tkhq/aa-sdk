@@ -5086,6 +5086,37 @@
     "@tufjs/canonical-json" "1.0.0"
     minimatch "^9.0.0"
 
+"@turnkey/api-key-stamper@0.1.1", "@turnkey/api-key-stamper@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@turnkey/api-key-stamper/-/api-key-stamper-0.1.1.tgz#7a5b5cd9cee7bd05059b87ccf66bfc264dbbd8a0"
+  integrity sha512-qs8fmWFiAhh7fAByx7j9/2F0VRe/qD7Yq3hi4FwD+jLU0CXdE+aim1cmJpAFFPKF1PBmPs6jh4XBODE40eqEEg==
+
+"@turnkey/http@2.0.0", "@turnkey/http@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@turnkey/http/-/http-2.0.0.tgz#6c88e54f2b07ef2b9081e6d4c7993aaa9252ac21"
+  integrity sha512-NTPXmZ7o6J8zb0Lfa2R3DDH+5/fGvrZp7mkIQrkF/IeFByvEqdwrcRQMWCBszVPzz9cIydW1zEGa1WQemmzE8g==
+  dependencies:
+    "@turnkey/api-key-stamper" "0.1.1"
+    "@turnkey/webauthn-stamper" "0.2.0"
+    cross-fetch "^3.1.5"
+
+"@turnkey/viem@^0.2.6":
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/@turnkey/viem/-/viem-0.2.6.tgz#a35b98700c8a9511b0b7839d64f4d6519c71c7ed"
+  integrity sha512-oMQuaXhlTlAx5kWCASmuCPY8ZquYV9O0/KCF8uqZM7AMKDXnBWSHSCwPo2bY3smzdUnsNpZTvHooXn+xwGZqLg==
+  dependencies:
+    "@turnkey/api-key-stamper" "0.1.1"
+    "@turnkey/http" "2.0.0"
+    cross-fetch "^4.0.0"
+    typescript "^5.1"
+
+"@turnkey/webauthn-stamper@0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@turnkey/webauthn-stamper/-/webauthn-stamper-0.2.0.tgz#aa546391ee59cf6c5d4201d74e038adb261765d2"
+  integrity sha512-BoHucuoTTmvqJzqSZs6XsLHSu1rwelSHUFBDlUfYX/QzK9BpkaxMxamOxk92OLpRb6qRUngrCQeS/jPHlWgQow==
+  dependencies:
+    buffer "^6.0.3"
+
 "@types/bn.js@^4.11.5":
   version "4.11.6"
   resolved "https://registry.yarnpkg.com/@types/bn.js/-/bn.js-4.11.6.tgz#c306c70d9358aaea33cd4eda092a742b9505967c"
@@ -8311,10 +8342,17 @@ create-require@^1.1.0:
   resolved "https://registry.yarnpkg.com/create-require/-/create-require-1.1.1.tgz#c1d7e8f1e5f6cfc9ff65f9cd352d37348756c333"
   integrity sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==
 
-cross-fetch@^3.1.4:
+cross-fetch@^3.1.4, cross-fetch@^3.1.5:
   version "3.1.8"
   resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.1.8.tgz#0327eba65fd68a7d119f8fb2bf9334a1a7956f82"
   integrity sha512-cvA+JwZoU0Xq+h6WkMvAUqPEYy92Obet6UdKLfW60qn99ftItKjB5T+BkyWOFWe2pUyfQ+IJHmpOTznqk1M6Kg==
+  dependencies:
+    node-fetch "^2.6.12"
+
+cross-fetch@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-4.0.0.tgz#f037aef1580bb3a1a35164ea2a848ba81b445983"
+  integrity sha512-e4a5N8lVvuLgAWgnCrLr2PP0YyDOTHa9H/Rj54dirp61qXnNq46m82bRhNqIA5VccJtWBvPTFRV3TtvHUKPB1g==
   dependencies:
     node-fetch "^2.6.12"
 
@@ -18176,7 +18214,7 @@ typescript-template@*:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.5.tgz#095979f9bcc0d09da324d58d03ce8f8374cbe65a"
   integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==
 
-"typescript@^4.6.4 || ^5.2.2", typescript@^5, typescript@^5.0.2, typescript@^5.0.4, typescript@^5.2.2:
+"typescript@^4.6.4 || ^5.2.2", typescript@^5, typescript@^5.0.2, typescript@^5.0.4, typescript@^5.1, typescript@^5.2.2:
   version "5.2.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.2.2.tgz#5ebb5e5a5b75f085f22bc3f8460fba308310fa78"
   integrity sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==

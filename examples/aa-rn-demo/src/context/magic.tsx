@@ -15,14 +15,14 @@ import React, {
   useState,
   type ReactNode,
 } from "react";
-import { type MagicAuthType } from "types/magic";
+import { type AuthType } from "types/auth";
 import { createWalletClient, custom, type WalletClient } from "viem";
 
 type MagicContextProps = {
   walletClient?: WalletClient;
   signer?: SmartAccountSigner;
   login: (
-    type: MagicAuthType,
+    type: AuthType,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...params: any[]
   ) => Promise<string | string[] | OAuthRedirectResult | null | undefined>;
@@ -80,7 +80,7 @@ export const MagicProvider = ({ children }: { children: ReactNode }) => {
 
   const login = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async (type: MagicAuthType, ...params: any[]) => {
+    async (type: AuthType, ...params: any[]) => {
       if (!magic) return;
       switch (type) {
         case "google":
