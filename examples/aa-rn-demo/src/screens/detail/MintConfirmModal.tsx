@@ -70,7 +70,7 @@ const MintConfirmModal = ({
   return (
     <FormBottomSheet
       showBottomSheet={showBottomSheet}
-      snapPoints={["70%"]}
+      snapPoints={["85%"]}
       onClose={(): void => {
         setShowBottomSheet(false);
       }}

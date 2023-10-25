@@ -1,6 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React, { useEffect } from "react";
-import { useColorScheme } from "react-native";
 import Icon, { IconType } from "react-native-dynamic-vector-icons";
 import { isReadyRef, navigationRef } from "react-navigation-helpers";
 /**
@@ -27,8 +26,7 @@ const Stack = createNativeStackNavigator();
 const MainStack = createNativeStackNavigator();
 
 const Navigation = () => {
-  const scheme = useColorScheme();
-  const isDarkMode = scheme === "dark";
+  const isDarkMode = false;
 
   const { scaAddress } = useWalletContext();
 
@@ -77,8 +75,9 @@ const Navigation = () => {
           tabBarInactiveTintColor: "gray",
           tabBarStyle: {
             backgroundColor: isDarkMode ? palette.black : palette.white,
-            paddingTop: 12,
-            height: 90,
+            paddingTop: 4,
+            marginBottom: 8,
+            height: 60,
           },
         })}
       >
@@ -117,8 +116,9 @@ const Navigation = () => {
           tabBarInactiveTintColor: "gray",
           tabBarStyle: {
             backgroundColor: isDarkMode ? palette.black : palette.white,
-            paddingTop: 12,
-            height: 90,
+            paddingTop: 4,
+            marginBottom: 8,
+            height: 60,
           },
         })}
       >
