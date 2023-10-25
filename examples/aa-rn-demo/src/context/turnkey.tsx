@@ -24,26 +24,20 @@ import {
   type LocalAccount,
   type WalletClient,
 } from "viem";
+import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { sepolia } from "viem/chains";
+
+const turnkeyEnabled = false;
 
 type TurnkeyContextProps = {
   biometricType: Biometrics | null;
   walletClient: WalletClient | undefined;
+  turnkeyClient: TurnkeyClient | undefined;
   signer: SmartAccountSigner | undefined;
   account: LocalAccount | undefined;
   login: () => Promise<Address>;
   logout: () => Promise<void>;
 };
-
-export const turnkeyClient = new TurnkeyClient(
-  {
-    baseUrl: Config.TURNKEY_BASE_URL,
-  },
-  new ApiKeyStamper({
-    apiPublicKey: Config.TURNKEY_API_PUBLIC_KEY,
-    apiPrivateKey: Config.TURNKEY_API_PRIVATE_KEY,
-  }),
-);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const defaultUnset: any = null;
@@ -51,6 +45,7 @@ const TurnkeyContext = createContext<TurnkeyContextProps>({
   login: defaultUnset,
   logout: defaultUnset,
   biometricType: null,
+  turnkeyClient: undefined,
   walletClient: undefined,
   signer: undefined,
   account: undefined,
@@ -59,13 +54,14 @@ const TurnkeyContext = createContext<TurnkeyContextProps>({
 export const useTurnkeyContext = () => useContext(TurnkeyContext);
 
 export const TurnkeyProvider = ({ children }: { children: ReactNode }) => {
-  const [account, setAccount] = useState<LocalAccount>();
+  const [account, setAccount] = useState<LocalAccount<any>>();
   const [signer, setSigner] = useState<SmartAccountSigner>();
   const [walletClient, setWalletClient] = useState<WalletClient>();
+  const [turnkeyClient, setTurnkeyClient] = useState<TurnkeyClient>();
 
   const [biometricType, setBiometricType] = useState<Biometrics | null>(null);
 
-  const { savePkey, removeKeys } = useCredentialProvider();
+  const { savePkey, saveAddress, removeAddress } = useCredentialProvider();
 
   useAsyncEffect(async () => {
     try {
@@ -78,70 +74,99 @@ export const TurnkeyProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  const newTurnkeySigner = async () => {
-    const turnkeyAccount = await createAccount({
-      client: turnkeyClient,
-      organizationId: Config.TURNKEY_ORGANIZATION_ID,
-      privateKeyId: Config.TURNKEY_PRIVATE_KEY_ID,
-    });
+  const newTurnkeySigner = useCallback(async () => {
+    let _turnkeyClient: TurnkeyClient | undefined;
+    let _turnkeyAccount: LocalAccount<any> | undefined;
 
-    const walletClient = createWalletClient({
-      account: turnkeyAccount,
+    if (turnkeyEnabled) {
+      console.log("[useTurnkeyContext] Creating new turnkey client");
+
+      _turnkeyClient = new TurnkeyClient(
+        {
+          baseUrl: Config.TURNKEY_BASE_URL,
+        },
+        new ApiKeyStamper({
+          apiPublicKey: Config.TURNKEY_API_PUBLIC_KEY,
+          apiPrivateKey: Config.TURNKEY_API_PRIVATE_KEY,
+        }),
+      );
+
+      _turnkeyAccount = await createAccount({
+        client: _turnkeyClient,
+        organizationId: Config.TURNKEY_ORGANIZATION_ID,
+        privateKeyId: Config.TURNKEY_PRIVATE_KEY_ID,
+      });
+    } else {
+      console.log("[useTurnkeyContext] Creating a new local wallet");
+      const privateKey = generatePrivateKey();
+      _turnkeyAccount = privateKeyToAccount(privateKey);
+      await savePkey(privateKey);
+    }
+
+    const _walletClient = createWalletClient({
+      account: _turnkeyAccount,
       chain: sepolia,
       transport: http(alchemyRpcUrl),
     });
 
-    const turnkeySigner: SmartAccountSigner = new LocalAccountSigner(
-      turnkeyAccount,
-    );
-
-    return {
-      turnkeyAccount,
-      turnkeySigner,
-      walletClient,
-    };
-  };
-
-  useAsyncEffect(async () => {
-    if (!walletClient) return;
     const [addresses, chainId] = await Promise.all([
-      walletClient.getAddresses(),
-      walletClient.getChainId(),
+      _walletClient.getAddresses(),
+      _walletClient.getChainId(),
     ]);
     console.log(
       `[useTurnkeyContext] Connected to ${_.first(
         addresses,
       )} on chain ${chainId}`,
     );
-  }, [walletClient?.account, walletClient?.chain]);
+
+    const turnkeySigner: SmartAccountSigner = new LocalAccountSigner(
+      _turnkeyAccount,
+    );
+
+    return {
+      turnkeyAccount: _turnkeyAccount,
+      turnkeySigner,
+      walletClient: _walletClient,
+      turnkeyClient: _turnkeyClient,
+    };
+  }, [savePkey]);
 
   const login = useCallback(async () => {
     if (!biometricType) {
       throw new Error("Passkey is not supported on this device");
     }
 
-    const { turnkeyAccount, turnkeySigner, walletClient } =
-      await newTurnkeySigner();
+    await FingerprintScanner.authenticate({
+      description: `Sign in with ${biometricType}`,
+      fallbackEnabled: true,
+    });
+
+    const {
+      turnkeyAccount,
+      turnkeySigner,
+      walletClient: _walletClient,
+      turnkeyClient: _turnkeyClient,
+    } = await newTurnkeySigner();
     setAccount(turnkeyAccount);
     setSigner(turnkeySigner);
-    setWalletClient(walletClient);
-
-    await savePkey(turnkeyAccount.publicKey);
+    setWalletClient(_walletClient);
+    setTurnkeyClient(_turnkeyClient);
+    await saveAddress(turnkeyAccount.address);
     return turnkeyAccount.address;
-  }, [biometricType, savePkey]);
+  }, [biometricType, newTurnkeySigner, saveAddress]);
 
   const logout = useCallback(async () => {
     setAccount(undefined);
     setSigner(undefined);
     setWalletClient(undefined);
-
-    await removeKeys();
-  }, [removeKeys]);
+    await removeAddress();
+  }, [removeAddress]);
 
   return (
     <TurnkeyContext.Provider
       value={{
         account,
+        turnkeyClient,
         walletClient,
         signer,
         login,

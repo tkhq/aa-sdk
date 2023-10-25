@@ -72,7 +72,7 @@ const SettingTextItem = (props: {
 };
 
 const SettingsScreen: React.FC<SettingsScreenProps> = () => {
-  const { auth: magicAuth, scaAddress, logout } = useWalletContext();
+  const { auth, scaAddress, logout } = useWalletContext();
 
   const { dispatchAlert } = useAlertContext();
 
@@ -122,32 +122,27 @@ const SettingsScreen: React.FC<SettingsScreenProps> = () => {
           containerStyle={{ backgroundColor: "transparent" }}
         />
         <View style={styles.itemGroup}>
-          {magicAuth && <SettingTextItem name={"Chain"} text={chain.name} />}
+          {auth && <SettingTextItem name={"Chain"} text={chain.name} />}
           <ViewHorizontalDivider />
-          {magicAuth?.email && (
-            <SettingTextItem name={"Email"} text={magicAuth.email} />
+          {auth?.email && <SettingTextItem name={"Email"} text={auth.email} />}
+          <ViewHorizontalDivider />
+          {auth?.phoneNumber && (
+            <SettingTextItem name={"Phone Number"} text={auth.phoneNumber} />
           )}
           <ViewHorizontalDivider />
-          {magicAuth?.phoneNumber && (
-            <SettingTextItem
-              name={"Phone Number"}
-              text={magicAuth.phoneNumber}
-            />
-          )}
+          {auth && <SettingTextItem name={"Signer Type"} text={auth.type!} />}
           <ViewHorizontalDivider />
-          {magicAuth && <SettingTextItem name={"Signer Type"} text={"magic"} />}
-          <ViewHorizontalDivider />
-          {magicAuth?.oAuthRedirectResult && (
+          {auth?.oAuthRedirectResult && (
             <SettingTextItem
               name={"Provider"}
-              text={magicAuth.oAuthRedirectResult.oauth.provider}
+              text={auth.oAuthRedirectResult.oauth.provider}
             />
           )}
           <ViewHorizontalDivider />
-          {magicAuth?.address && (
+          {auth?.address && (
             <SettingTextItem
               name={"Owner"}
-              text={magicAuth.address}
+              text={auth.address}
               copiable={true}
             />
           )}

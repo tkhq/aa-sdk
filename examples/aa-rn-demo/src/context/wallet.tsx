@@ -78,24 +78,23 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
             address,
             type,
           });
-          return;
+        } else {
+          const res = await magicLogin(type, ...params);
+          const metaData = await magic.user.getInfo();
+
+          setAuth({
+            address: metaData.publicAddress,
+            type,
+            metaData,
+            did: type === "email" || type === "sms" ? String(res) : undefined,
+            email: metaData.email,
+            phoneNumber: metaData.phoneNumber,
+            oAuthRedirectResult:
+              type === "google" || type === "apple"
+                ? (res as OAuthRedirectResult)
+                : undefined,
+          });
         }
-
-        const res = await magicLogin(type, ...params);
-        const metaData = await magic.user.getInfo();
-
-        setAuth({
-          address: metaData.publicAddress,
-          type,
-          metaData,
-          did: type === "email" || type === "sms" ? String(res) : undefined,
-          email: metaData.email,
-          phoneNumber: metaData.phoneNumber,
-          oAuthRedirectResult:
-            type === "google" || type === "apple"
-              ? (res as OAuthRedirectResult)
-              : undefined,
-        });
 
         dispatchAlert({
           type: "open",

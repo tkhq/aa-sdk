@@ -11,7 +11,6 @@ import React, {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useState,
   type ReactNode,
 } from "react";
@@ -50,21 +49,6 @@ export const MagicProvider = ({ children }: { children: ReactNode }) => {
   const [walletClient, setWalletClient] = useState<WalletClient>();
   const [signer, setSigner] = useState<SmartAccountSigner>();
 
-  useEffect(() => {
-    const magicClient: WalletClient = createWalletClient({
-      chain,
-      transport: custom(magic.rpcProvider),
-    });
-
-    const magicSigner: SmartAccountSigner = new WalletClientSigner(
-      magicClient,
-      "magic",
-    );
-
-    setWalletClient(magicClient);
-    setSigner(magicSigner);
-  }, []);
-
   useAsyncEffect(async () => {
     if (!walletClient) return;
     const [addresses, chainId] = await Promise.all([
@@ -85,24 +69,41 @@ export const MagicProvider = ({ children }: { children: ReactNode }) => {
       switch (type) {
         case "google":
         case "apple":
-          return magic.oauth.loginWithPopup({
+          await magic.oauth.loginWithPopup({
             provider: type,
             redirectURI: "accountkitboilerplate://",
           });
+          break;
         case "email":
           // returns did
-          return magic.auth.loginWithEmailOTP({ email: params[0] });
+          await magic.auth.loginWithEmailOTP({ email: params[0] });
+          break;
         case "sms":
           // returns did
-          return magic.auth.loginWithSMS({
+          await magic.auth.loginWithSMS({
             phoneNumber: params[0],
           });
+          break;
         case "magic":
           // returns accounts
-          return magic.wallet.connectWithUI();
+          await magic.wallet.connectWithUI();
+          break;
         default:
           throw new Error(`Invalid auth type ${type}`);
       }
+
+      const magicClient: WalletClient = createWalletClient({
+        chain,
+        transport: custom(magic.rpcProvider),
+      });
+
+      const magicSigner: SmartAccountSigner = new WalletClientSigner(
+        magicClient,
+        "magic",
+      );
+
+      setWalletClient(magicClient);
+      setSigner(magicSigner);
     },
     [],
   );

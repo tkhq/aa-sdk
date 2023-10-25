@@ -1,5 +1,6 @@
 export enum KeyChainEnum {
   PK = "PK",
+  ADDRESS = "ADDRESS",
   PIN = "PIN",
   NEW_PIN = "NEW_PIN",
 }

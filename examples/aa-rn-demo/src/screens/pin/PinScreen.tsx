@@ -8,7 +8,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 import { useAlertContext } from "@context/alert";
+import { useTurnkeyContext } from "@context/turnkey";
 import { useAppNavigation } from "@hooks/useAppNavigation";
+import { useAsyncEffect } from "@hooks/useAsyncEffect";
 import { useCredentialProvider } from "@hooks/useCredentialProvider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
@@ -21,6 +23,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import FingerprintScanner from "react-native-fingerprint-scanner";
 import RNRestart from "react-native-restart";
 import { Routes } from "types/navigation";
 import { LocalStorageKey } from "types/storage";
@@ -252,6 +255,24 @@ const PinScreen = (): ReactElement => {
   useEffect(() => {
     setPinType(type);
   }, [type]);
+
+  const { biometricType } = useTurnkeyContext();
+
+  useAsyncEffect(async () => {
+    if (pinType !== "auth" || biometricType === null) {
+      return;
+    }
+
+    try {
+      await FingerprintScanner.authenticate({
+        description: `Sign in with ${biometricType}`,
+        fallbackEnabled: true,
+      });
+      resultCallback && resultCallback(true);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [pinType]);
 
   useEffect(() => {
     const handlePin = async (): Promise<void> => {

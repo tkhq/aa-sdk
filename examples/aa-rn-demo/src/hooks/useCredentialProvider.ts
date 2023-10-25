@@ -27,6 +27,26 @@ export const useCredentialProvider = () => {
     await Promise.all([resetInternetCredentials(KeyChainEnum.PK)]);
   }, []);
 
+  const saveAddress = useCallback(async (address: string) => {
+    await setInternetCredentials(
+      KeyChainEnum.ADDRESS,
+      KeyChainEnum.ADDRESS,
+      address,
+    );
+  }, []);
+
+  const getAddress = useCallback(async () => {
+    const res = await getInternetCredentials(KeyChainEnum.ADDRESS);
+    if (res) {
+      return res.password;
+    }
+    return "";
+  }, []);
+
+  const removeAddress = useCallback(async () => {
+    await Promise.all([resetInternetCredentials(KeyChainEnum.ADDRESS)]);
+  }, []);
+
   const saveNewPin = useCallback(async (pin: string) => {
     await setInternetCredentials(
       KeyChainEnum.NEW_PIN,
@@ -54,6 +74,9 @@ export const useCredentialProvider = () => {
   }, []);
 
   return {
+    saveAddress,
+    getAddress,
+    removeAddress,
     savePkey,
     getPkey,
     removeKeys,
