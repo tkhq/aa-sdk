@@ -62,7 +62,7 @@ type MainRouteParamsUnion =
     }
   | {
       route: Routes.Detail;
-      params: { item: OwnedNft | ICardItem };
+      params: { item: OwnedNft | ICardItem; mintable?: boolean };
     };
 
 export type RouteParamsUnion =

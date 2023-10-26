@@ -84,7 +84,10 @@ const SelectedCollectionNftsSheet = ({
             renderItem={({ item }): ReactElement => (
               <TouchableOpacity
                 onPress={(): void => {
-                  NavigationService.push(Routes.Detail, { item });
+                  NavigationService.push(Routes.Detail, {
+                    item,
+                    mintable: false,
+                  });
                 }}
               >
                 <View

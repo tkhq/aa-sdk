@@ -38,7 +38,7 @@ export default [
     price: parseEther("0.00"),
   },
   {
-    title: "Account Kit NFT 2",
+    title: "Account Kit NFT 3",
     description:
       "[Edition 3] Mint this NFT with an ERC-4337 smart account powered by Account Kit.",
     contract: {

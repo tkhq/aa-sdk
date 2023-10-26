@@ -24,18 +24,22 @@ const DetailScreen = (): ReactElement => {
         }}
       />
       <NftDetails item={params!.item} />
-      <TouchableButton
-        containerStyle={{ padding: 32 }}
-        buttonsStyle={{ borderRadius: 24 }}
-        disabled={showBottomSheet}
-        handler={() => setShowBottomSheet(true)}
-        title="Mint"
-      />
-      <MintConfirmModal
-        item={params!.item}
-        showBottomSheet={showBottomSheet}
-        setShowBottomSheet={setShowBottomSheet}
-      />
+      {params.mintable && (
+        <>
+          <TouchableButton
+            containerStyle={{ padding: 32 }}
+            buttonsStyle={{ borderRadius: 24 }}
+            disabled={showBottomSheet}
+            handler={() => setShowBottomSheet(true)}
+            title="Mint"
+          />
+          <MintConfirmModal
+            item={params!.item}
+            showBottomSheet={showBottomSheet}
+            setShowBottomSheet={setShowBottomSheet}
+          />
+        </>
+      )}
     </Container>
   );
 };

@@ -22,7 +22,7 @@ const HomeScreen: React.FC<HomeScreenProps> = () => {
   const styles = useMemo(() => createStyles(), []);
 
   const handleItemPress = (item: OwnedNft | ICardItem) => {
-    NavigationService.push(Routes.Detail, { item });
+    NavigationService.push(Routes.Detail, { item, mintable: true });
   };
 
   /* -------------------------------------------------------------------------- */
@@ -79,10 +79,22 @@ const HomeScreen: React.FC<HomeScreenProps> = () => {
       return;
     }
 
-    const [routeName] = route.split("/");
+    // app link
+    let routeName;
+    if (url.startsWith("https://")) {
+      const [, _routeName] = route.split("/");
+      routeName = _routeName;
+    } else {
+      const [_routeName] = route.split("/");
+      routeName = _routeName;
+    }
+
     console.log(`Deeplink: ${routeName} ${id}`);
     if (routeName === "nft") {
-      NavigationService.push(Routes.Detail, { item: MockData[Number(id)] });
+      NavigationService.push(Routes.Detail, {
+        item: MockData[Number(id)],
+        mintable: true,
+      });
     } else {
       console.log(`Deeplink: Unable to find route ${url}`);
     }
@@ -99,8 +111,10 @@ const HomeScreen: React.FC<HomeScreenProps> = () => {
       });
       return;
     }
-    Linking.addEventListener("url", handleOpenUrl);
-    return () => Linking.removeAllListeners("url");
+    const subscription = Linking.addEventListener("url", handleOpenUrl);
+    return () => {
+      if (subscription) subscription.remove();
+    };
   }, [handleOpenUrl]);
 
   return (

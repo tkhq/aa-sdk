@@ -16,18 +16,23 @@ const NftDetails = ({ item }: { item: OwnedNft | ICardItem }): ReactElement => {
     <View style={{ flex: 1 }}>
       <ScrollView>
         <View style={styles.body}>
-          <View style={{ paddingBottom: 20, rowGap: 12 }}>
-            <Row style={{ columnGap: 6 }}>
+          <View style={{ paddingHorizontal: 8, paddingBottom: 24, rowGap: 12 }}>
+            <View style={{ alignItems: "center" }}>
               {item.title && (
                 <FormText size={24} font={"B"}>{`${item.title}`}</FormText>
               )}
-              {item.tokenId && (
-                <FormText size={16}>{`Token ID: ${item.tokenId}`}</FormText>
-              )}
-              {item.tokenType && (
-                <FormText size={16}>{`(${item.tokenType})`}</FormText>
-              )}
-            </Row>
+              <Row style={{ columnGap: 6, alignItems: "center" }}>
+                {item.tokenId && (
+                  <FormText size={16}>{`Token ID: ${item.tokenId}`}</FormText>
+                )}
+                {item.tokenType && (
+                  <FormText
+                    style={{ paddingHorizontal: 6 }}
+                    size={16}
+                  >{`(${item.tokenType})`}</FormText>
+                )}
+              </Row>
+            </View>
             {"acquiredAt" in item && item.acquiredAt?.blockTimestamp && (
               <FormText font={"R"} color={colors.black._700}>
                 {convertTimestampToDate(

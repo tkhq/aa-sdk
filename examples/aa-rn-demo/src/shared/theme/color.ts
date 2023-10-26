@@ -11,10 +11,17 @@ const opacity = {
 };
 
 const primary = {
-  _50: "#f6f2Ef",
-  _100: "#C4C2FF",
-  _300: "#EDA3FF",
-  _400: "#FD48CE",
+  _50: "#FCD6B0",
+  _100: "#FCB6B0",
+  _300: "#FC96B0",
+  _400: "#FC56B0",
+};
+
+const secondary = {
+  _50: "#FFD800",
+  _100: "#FFB800",
+  _300: "#FFA400",
+  _400: "#FF8D45",
 };
 
 const black = {
@@ -53,6 +60,7 @@ export const colors = {
   error,
   warning,
   primary,
+  secondary,
 
   success,
   info,
