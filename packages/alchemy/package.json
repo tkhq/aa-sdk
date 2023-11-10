@@ -45,6 +45,7 @@
     "vitest": "^0.31.0"
   },
   "dependencies": {
+    "@alchemy/aa-accounts": "^1.2.0",
     "@alchemy/aa-core": "^1.2.0",
     "viem": "^1.16.2"
   },

@@ -9,11 +9,10 @@ import {
 import { generatePrivateKey } from "viem/accounts";
 import { sepolia } from "viem/chains";
 import { LightSmartContractAccount } from "../../index.js";
-import { createLightAccountAlchemyProvider } from "../provider/factory.js";
+import { createLightAccountProvider } from "../provider.js";
 import {
   API_KEY,
   LIGHT_ACCOUNT_OWNER_MNEMONIC,
-  PAYMASTER_POLICY_ID,
   UNDEPLOYED_OWNER_MNEMONIC,
 } from "./constants.js";
 
@@ -147,11 +146,6 @@ describe("Light Account Tests", () => {
     const provider = givenConnectedProvider({
       owner,
       chain,
-      feeOpts: {
-        baseFeeBufferPercent: 50n,
-        maxPriorityFeeBufferPercent: 50n,
-        preVerificationGasBufferPercent: 50n,
-      },
     });
     // create a throwaway address
     const throwawayOwner = LocalAccountSigner.privateKeyToAccountSigner(
@@ -197,23 +191,14 @@ const givenConnectedProvider = ({
   owner,
   chain,
   accountAddress,
-  feeOpts,
 }: {
   owner: SmartAccountSigner;
   chain: Chain;
   accountAddress?: Address;
-  feeOpts?: {
-    baseFeeBufferPercent?: bigint;
-    maxPriorityFeeBufferPercent?: bigint;
-    preVerificationGasBufferPercent?: bigint;
-  };
 }) =>
-  createLightAccountAlchemyProvider({
-    apiKey: API_KEY!,
+  createLightAccountProvider({
+    rpcProvider: `${chain.rpcUrls.alchemy.http[0]}/${API_KEY!}`,
     owner,
     chain,
-    feeOpts,
     accountAddress,
-  }).withAlchemyGasManager({
-    policyId: PAYMASTER_POLICY_ID,
   });
