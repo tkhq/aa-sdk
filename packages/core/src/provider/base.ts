@@ -509,16 +509,30 @@ export class SmartAccountProvider<
     return struct;
   };
 
-  readonly gasEstimator: AccountMiddlewareFn = async (struct, _overrides) => {
-    const request = deepHexlify(await resolveProperties(struct));
-    const estimates = await this.rpcClient.estimateUserOperationGas(
-      request,
-      this.getEntryPointAddress()
-    );
+  readonly gasEstimator: AccountMiddlewareFn = async (struct, overrides) => {
+    let { callGasLimit, verificationGasLimit, preVerificationGas } =
+      overrides ?? {};
 
-    struct.callGasLimit = estimates.callGasLimit;
-    struct.verificationGasLimit = estimates.verificationGasLimit;
-    struct.preVerificationGas = estimates.preVerificationGas;
+    if (
+      callGasLimit === undefined ||
+      verificationGasLimit === undefined ||
+      preVerificationGas === undefined
+    ) {
+      const request = deepHexlify(await resolveProperties(struct));
+      const estimates = await this.rpcClient.estimateUserOperationGas(
+        request,
+        this.getEntryPointAddress()
+      );
+
+      callGasLimit = callGasLimit ?? estimates.callGasLimit;
+      verificationGasLimit =
+        verificationGasLimit ?? estimates.verificationGasLimit;
+      preVerificationGas = preVerificationGas ?? estimates.preVerificationGas;
+    }
+
+    struct.callGasLimit = callGasLimit;
+    struct.verificationGasLimit = verificationGasLimit;
+    struct.preVerificationGas = preVerificationGas;
 
     return struct;
   };
@@ -570,8 +584,7 @@ export class SmartAccountProvider<
       BigInt(resolved.maxPriorityFeePerGas ?? 0n);
 
     Object.keys(this.feeOptions ?? {}).forEach((field) => {
-      if (overrides?.[field as keyof UserOperationOverrides] !== undefined)
-        return;
+      if (overrides?.[field as keyof UserOperationOverrides] != null) return;
       resolved[field as keyof UserOperationFeeOptions] = applyFeeOption(
         resolved[field as keyof UserOperationFeeOptions],
         this.feeOptions[field as keyof UserOperationFeeOptions]
