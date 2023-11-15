@@ -12,6 +12,6 @@ export type FeeOpts = z.infer<typeof FeeOptsSchema>;
 
 export type AlchemyProviderConfig = z.infer<typeof AlchemyProviderConfigSchema>;
 
-export type LightAccountAlchemyProviderConfig = z.infer<
+export type LightAccountAlchemyProviderConfig = z.input<
   typeof LightAccountAlchemyProviderConfigSchema
 >;
