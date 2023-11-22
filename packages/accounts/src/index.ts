@@ -36,6 +36,10 @@ export {
   createMultiOwnerMSCASchema,
   type MultiOwnerMSCAParams,
 } from "./msca/multi-owner-account.js";
+export { pluginManagerDecorator } from "./msca/plugins/manager/decorator.js";
+export type * from "./msca/plugins/manager/installPlugin.js";
+export type * from "./msca/plugins/manager/types.js";
+export type * from "./msca/plugins/manager/uninstallPlugin.js";
 export {
   MultiOwnerPlugin,
   MultiOwnerPluginExecutionFunctionAbi,
