@@ -12,6 +12,8 @@ import { SimpleAccountFactoryAbi } from "../abis/SimpleAccountFactoryAbi.js";
 import type { SmartAccountSigner } from "../signer/types.js";
 import type { BatchUserOperationCallData } from "../types.js";
 import { BaseSmartContractAccount } from "./base.js";
+import { BasicAccountSigner } from "./builder/basicSigner.js";
+import { SmartAccountBuilder } from "./builder/index.js";
 import { SimpleSmartAccountParamsSchema } from "./schema.js";
 import type { SimpleSmartAccountParams } from "./types.js";
 
@@ -86,3 +88,56 @@ export class SimpleSmartContractAccount<
     ]);
   }
 }
+
+export const buildSimpleAccount = <
+  TTransport extends Transport | FallbackTransport = Transport
+>(
+  params_: SimpleSmartAccountParams<TTransport>
+) => {
+  const params = SimpleSmartAccountParamsSchema<TTransport>().parse(params_);
+  const builder = new SmartAccountBuilder()
+    .withSigner(BasicAccountSigner(params.owner))
+    .withFactory(() => ({
+      factoryAddress: params.factoryAddress,
+      encodeFactoryCallData: async () =>
+        encodeFunctionData({
+          abi: SimpleAccountFactoryAbi,
+          functionName: "createAccount",
+          args: [await params.owner.getAddress(), params.index ?? 0n],
+        }),
+    }))
+    .withExecutor(() => ({
+      encodeExecute: async (
+        target: Hex,
+        value: bigint,
+        data: Hex
+      ): Promise<`0x${string}`> => {
+        return encodeFunctionData({
+          abi: SimpleAccountAbi,
+          functionName: "execute",
+          args: [target, value, data],
+        });
+      },
+      encodeBatchExecute: async (
+        txs: BatchUserOperationCallData
+      ): Promise<`0x${string}`> => {
+        const [targets, datas] = txs.reduce(
+          (accum, curr) => {
+            accum[0].push(curr.target);
+            accum[1].push(curr.data);
+
+            return accum;
+          },
+          [[], []] as [Address[], Hex[]]
+        );
+
+        return encodeFunctionData({
+          abi: SimpleAccountAbi,
+          functionName: "executeBatch",
+          args: [targets, datas],
+        });
+      },
+    }));
+
+  return builder.build<TTransport>(params);
+};
