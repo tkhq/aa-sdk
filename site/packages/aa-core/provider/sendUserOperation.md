@@ -75,4 +75,4 @@ A Promise containing the hash of the user operation and the request that was sen
 
 ### `overrides?: UserOperationOverrides`
 
-Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas` or `paymasterAndData` on the user operation request
+Optional parameter where you can specify override values for `maxFeePerGas`, `maxPriorityFeePerGas`, `callGasLimit`, `preVerificationGas`, `verificationGasLimit` or `paymasterAndData` on the user operation request
