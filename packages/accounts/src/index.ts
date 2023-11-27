@@ -30,17 +30,19 @@ export {
   type MSCA,
   type SignerMethods,
 } from "./msca/builder.js";
+export { createMSCAProvider } from "./msca/msca-provider.js";
 export {
   createMultiOwnerMSCA,
   createMultiOwnerMSCABuilder,
   createMultiOwnerMSCASchema,
   type MultiOwnerMSCAParams,
 } from "./msca/multi-owner-account.js";
-export { pluginManagerDecorator } from "./msca/plugins/manager/decorator.js";
-export type * from "./msca/plugins/manager/installPlugin.js";
-export type * from "./msca/plugins/manager/types.js";
-export type * from "./msca/plugins/manager/uninstallPlugin.js";
+export * from "./msca/plugins/manager/index.js";
 export {
   MultiOwnerPlugin,
   MultiOwnerPluginExecutionFunctionAbi,
 } from "./msca/plugins/multi-owner.js";
+export {
+  SessionKeyPlugin,
+  SessionKeyPluginExecutionFunctionAbi,
+} from "./msca/plugins/session-key.js";
